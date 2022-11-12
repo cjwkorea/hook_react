@@ -1,23 +1,114 @@
-import React from "react";
-import { Card, ListGroup } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CloseButton,
+  Col,
+  Container,
+  ListGroup,
+  Navbar,
+  Offcanvas,
+  Toast,
+} from "react-bootstrap";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import "./1.css";
 const Child2 = ({ data, deleteData }) => {
   const alertClicked = () => {
-    alert("오늘 할일 완료");
+    alert("금일 일정 완료");
   };
+  const [timer, setTimer] = useState("00:00:00");
+  const currentTimer = () => {
+  
+  const date = new Date();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    setTimer(`${hours}:${minutes}:${seconds}`)
+  }
+    const startTimer = () => {
+      setInterval(currentTimer, 1000)
+    }
+    startTimer()
+  
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [showA, setShowA] = useState(true);
+  const toggleShowA = () => setShowA(!showA);
+
+  
+
 
   return (
     <div>
-      <h1>자식2</h1>
+      <div>
+      <Col md={6} className="mb-2">
+        <Button onClick={toggleShowA} className="mb-2">
+         금일 일정
+        </Button>
+        <Toast show={showA} onClose={toggleShowA}>
+          <Toast.Header>
+            <img
+              src="holder.js/20x20?text=%20"
+              className="rounded me-2"
+              alt=""
+            />
+            <strong className="me-auto"><h3>오늘의 할일</h3></strong>
+            <small>현재 시간<h2>{timer}</h2></small>
+          </Toast.Header>
+          <Toast.Body> <ListGroup variant="flush" action onClick={alertClicked}>
+            {data.map((todo, index) => {
+              return (
+                <ListGroup.Item>
+                  {todo}{" "}
+                  <button onClick={() => deleteData(index)}>
+                    <CloseButton  style={{ backgroundColor: "red" }} />
+                  </button>
+                </ListGroup.Item>
+              );
+            })}
+             </ListGroup></Toast.Body>
+        </Toast>
+      </Col>
+      <Navbar expand="lg" style={{ backgroundColor: "blue" }}>
+        <Navbar.Brand><Button variant="danger" onClick={handleShow}>
+        금일 일정
+      </Button></Navbar.Brand>
+       
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>금일 일정</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <ListGroup variant="flush" action onClick={alertClicked}>
+            {data.map((todo, index) => {
+              return (
+                <ListGroup.Item>
+                  {todo}{" "}
+                  <button onClick={() => deleteData(index)}>
+                    <CloseButton  style={{ backgroundColor: "red" }} />
+                  </button>
+                </ListGroup.Item>
+              );
+            })}
+             </ListGroup>
+        </Offcanvas.Body>
+      </Offcanvas>
+      </Navbar>
+      </div>
       <div className="list">
         <Card style={{ width: "18rem" }}>
-          <Card.Header>할일 목록</Card.Header>
+          <Card.Header>일정 목록</Card.Header>
           <ListGroup variant="flush" action onClick={alertClicked}>
             {data.map((todo, index) => {
               return (
                 <ListGroup.Item>
-                  {todo} <button onClick={() => deleteData(index)}>👍</button>
+                  {todo}{" "}
+                  <button onClick={() => deleteData(index)}>
+                    <CloseButton style={{ backgroundColor: "red" }}/>
+                  </button>
                 </ListGroup.Item>
               );
             })}
@@ -33,18 +124,24 @@ const Child2 = ({ data, deleteData }) => {
             {data.map((todo, index) => {
               return (
                 <ListGroup.Item>
-                  {todo} <button onClick={() => deleteData(index)}>👍</button>
+                  {todo}{" "}
+                  <button onClick={() => deleteData(index)}>
+                    <CloseButton  style={{ backgroundColor: "red" }} />
+                  </button>
                 </ListGroup.Item>
               );
             })}
           </ListGroup>
         </Card>
-        <DropdownButton id="dropdown-basic-button" title="할일 목록">
+        <DropdownButton id="dropdown-basic-button" title="일정 목록">
           <ListGroup variant="flush" action onClick={alertClicked}>
             {data.map((todo, index) => {
               return (
                 <ListGroup.Item>
-                  {todo} <button onClick={() => deleteData(index)}>👍</button>
+                  {todo}{" "}
+                  <button onClick={() => deleteData(index)}>
+                    <CloseButton style={{ backgroundColor: "red" }}/>
+                  </button>
                 </ListGroup.Item>
               );
             })}
